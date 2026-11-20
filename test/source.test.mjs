@@ -36,7 +36,7 @@ test('本地来源按阶段返回原始记录', async (context) => {
     const response = await fetch(base + probe.path, { method: probe.method ?? 'GET', redirect: 'manual' });
     const body = await response.text();
     const value = probe.field ? probe.field.reduce((item, field) => item[field], JSON.parse(body)) : body;
-    assert.equal(value, probe.value, probe.path);
+    assert.deepEqual(value, probe.value, probe.path);
   }
 
   const calls = await (await fetch(base + '/_source_calls')).json();
