@@ -1,0 +1,38 @@
+[
+  {
+    "step": "walk",
+    "path": "/north/patrol?cursor=0",
+    "field": [
+      "patrols",
+      1,
+      "observations"
+    ],
+    "value": []
+  },
+  {
+    "step": "attach",
+    "path": "/east/media/L9",
+    "field": [
+      "observation"
+    ],
+    "value": "Y9"
+  },
+  {
+    "step": "reconcile",
+    "path": "/registry/permissions",
+    "field": [
+      3,
+      "gridDigits"
+    ],
+    "value": 2
+  },
+  {
+    "step": "expire",
+    "path": "/registry/permissions",
+    "field": [
+      4,
+      "ref"
+    ],
+    "value": "P-k"
+  }
+]

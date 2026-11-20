@@ -1,0 +1,336 @@
+{
+  "steps": [
+    "walk",
+    "partial",
+    "attach",
+    "reconcile",
+    "expire"
+  ],
+  "routes": {
+    "common": {
+      "GET /patrol/areas": {
+        "status": 200,
+        "body": [
+          {
+            "route": "R-A",
+            "segments": [
+              {
+                "area": "A1",
+                "start": 0,
+                "end": 600
+              },
+              {
+                "area": "A2",
+                "start": 600,
+                "end": 1000
+              }
+            ]
+          },
+          {
+            "route": "R-B",
+            "segments": [
+              {
+                "area": "A3",
+                "start": 0,
+                "end": 800
+              }
+            ]
+          }
+        ]
+      },
+      "GET /north/patrol?cursor=0": {
+        "status": 200,
+        "body": {
+          "cursor": 1,
+          "next": null,
+          "patrols": [
+            {
+              "id": "N1",
+              "route": "R-A",
+              "walked": [
+                0,
+                600
+              ],
+              "status": "complete",
+              "observations": [
+                {
+                  "id": "O7",
+                  "location": "410203",
+                  "time": "2026-12-02T08:11:00Z"
+                },
+                {
+                  "id": "O8",
+                  "location": "410504",
+                  "time": "2026-12-02T10:00:00Z"
+                }
+              ]
+            },
+            {
+              "id": "N2",
+              "route": "R-B",
+              "walked": [
+                0,
+                800
+              ],
+              "status": "complete",
+              "observations": []
+            }
+          ]
+        }
+      },
+      "GET /east/sets": {
+        "status": 200,
+        "body": [
+          {
+            "batch": "E9",
+            "declaredParts": 2,
+            "segments": [
+              "/east/E9/1",
+              "/east/E9/2"
+            ]
+          }
+        ]
+      },
+      "GET /east/E9/1": {
+        "status": 200,
+        "body": {
+          "patrol": "E1",
+          "route": "R-A",
+          "walked": [
+            600,
+            900
+          ],
+          "observations": [
+            {
+              "id": "Y9",
+              "time": "2026-12-02T08:13:00Z",
+              "attachment": "/east/media/L9"
+            }
+          ]
+        }
+      },
+      "GET /east/E9/2": {
+        "status": 200,
+        "body": {
+          "patrol": "E1",
+          "route": "R-A",
+          "walked": [
+            900,
+            1000
+          ],
+          "observations": []
+        }
+      },
+      "GET /east/media/L9": {
+        "status": 200,
+        "body": {
+          "observation": "Y9",
+          "location": "410206",
+          "recordedAt": "2026-12-02T13:00:00Z"
+        }
+      },
+      "GET /registry/links": {
+        "status": 200,
+        "body": []
+      },
+      "GET /registry/permissions": {
+        "status": 200,
+        "body": [
+          {
+            "id": "P-k",
+            "op": "grant",
+            "item": "north:O7",
+            "gridDigits": 6,
+            "time": "hour",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-a",
+            "op": "grant",
+            "item": "north:O8",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-e",
+            "op": "grant",
+            "item": "east:Y9",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          }
+        ]
+      },
+      "GET /subscribers/acks": {
+        "status": 200,
+        "body": [
+          {
+            "subscriber": "校内阅览终端",
+            "through": 1
+          }
+        ]
+      }
+    },
+    "walk": {
+      "GET /east/media/L9": {
+        "status": 202,
+        "body": {
+          "state": "pending"
+        }
+      }
+    },
+    "partial": {
+      "GET /east/E9/2": {
+        "status": 202,
+        "body": {
+          "state": "pending"
+        }
+      },
+      "GET /east/media/L9": {
+        "status": 202,
+        "body": {
+          "state": "pending"
+        }
+      }
+    },
+    "attach": {},
+    "reconcile": {
+      "GET /registry/links": {
+        "status": 200,
+        "body": [
+          {
+            "event": "G11",
+            "members": [
+              "north:O7",
+              "east:Y9"
+            ],
+            "status": "verified"
+          }
+        ]
+      },
+      "GET /east/media/L9": {
+        "status": 200,
+        "body": {
+          "observation": "Y9",
+          "location": "410209",
+          "revises": "410206"
+        }
+      },
+      "GET /registry/permissions": {
+        "status": 200,
+        "body": [
+          {
+            "id": "P-k",
+            "op": "grant",
+            "item": "north:O7",
+            "gridDigits": 6,
+            "time": "hour",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-a",
+            "op": "grant",
+            "item": "north:O8",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-e",
+            "op": "grant",
+            "item": "east:Y9",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "op": "bound",
+            "id": "B1",
+            "item": "east:Y9",
+            "gridDigits": 2,
+            "time": "day",
+            "from": "2026-12-02T15:00:00Z",
+            "embargoUntil": "2026-12-03T00:00:00Z"
+          }
+        ]
+      }
+    },
+    "expire": {
+      "GET /registry/links": {
+        "status": 200,
+        "body": [
+          {
+            "event": "G11",
+            "members": [
+              "north:O7",
+              "east:Y9"
+            ],
+            "status": "verified"
+          }
+        ]
+      },
+      "GET /registry/permissions": {
+        "status": 200,
+        "body": [
+          {
+            "id": "P-k",
+            "op": "grant",
+            "item": "north:O7",
+            "gridDigits": 6,
+            "time": "hour",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-a",
+            "op": "grant",
+            "item": "north:O8",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "id": "P-e",
+            "op": "grant",
+            "item": "east:Y9",
+            "gridDigits": 4,
+            "time": "day",
+            "from": "2026-12-02T00:00:00Z"
+          },
+          {
+            "op": "bound",
+            "id": "B1",
+            "item": "east:Y9",
+            "gridDigits": 2,
+            "time": "day",
+            "from": "2026-12-02T15:00:00Z",
+            "embargoUntil": "2026-12-03T00:00:00Z"
+          },
+          {
+            "op": "revoke",
+            "ref": "P-k",
+            "from": "2026-12-03T00:00:00Z"
+          },
+          {
+            "op": "unbind",
+            "ref": "B1",
+            "from": "2026-12-03T12:00:00Z"
+          }
+        ]
+      },
+      "GET /subscribers/acks": {
+        "status": 200,
+        "body": [
+          {
+            "subscriber": "校内阅览终端",
+            "through": 1
+          },
+          {
+            "subscriber": "市级数据交换",
+            "through": 3
+          }
+        ]
+      }
+    }
+  }
+}
