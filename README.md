@@ -11,7 +11,7 @@ npm start
 npm test
 ```
 
-不同终端分别启动服务和执行独立来源测试。默认地址为 `http://127.0.0.1:4173`，可设置 `SOURCE_PORT`。来源使用进程内演练时钟，启动时处于 `walk`。用 `PUT /_source_clock?step=partial` 推进到下一阶段，`GET /_source_calls` 查看本实例收到的业务请求。可查阶段为 `walk`、`partial`、`attach`、`reconcile`、`expire`。重启服务会重置时钟和请求记录。预置的源端回执按演练阶段出现，和本地应用是否已处理某次回执是两回事。
+不同终端分别启动服务和执行独立来源测试。默认地址为 `http://127.0.0.1:4173`，可通过 `SOURCE_PORT` 设置端口，也接受通用的 `PORT`，同时设置时以 `SOURCE_PORT` 为准。`GET /health` 用于确认来源服务已就绪。来源使用进程内演练时钟，启动时处于 `walk`。用 `PUT /_source_clock?step=partial` 推进到下一阶段，`GET /_source_calls` 查看本实例收到的业务请求。可查阶段为 `walk`、`partial`、`attach`、`reconcile`、`expire`。重启服务会重置时钟和请求记录。预置的源端回执按演练阶段出现，和本地应用是否已处理某次回执是两回事。
 `npm test` 核对可访问的上游响应和合成资料。
 
 ## 来源约定

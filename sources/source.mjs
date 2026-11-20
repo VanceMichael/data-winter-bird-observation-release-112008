@@ -28,6 +28,10 @@ export function createSource() {
     try {
       const url = new URL(request.url, 'http://localhost');
       const path = url.pathname + url.search;
+      if (request.method === 'GET' && path === '/health') {
+        write(response, 200, json({ status: 'ok' }));
+        return;
+      }
       if (request.method === 'PUT' && url.pathname === '/_source_clock') {
         const next = url.searchParams.get('step');
         if (!data.steps.includes(next)) {
@@ -67,7 +71,7 @@ export function createSource() {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const port = Number(process.env.SOURCE_PORT ?? 4173);
+  const port = Number(process.env.SOURCE_PORT ?? process.env.PORT ?? 4173);
   createSource().listen(port, '127.0.0.1', function () {
     process.stdout.write(`本地来源 http://127.0.0.1:${this.address().port}\n`);
   });
