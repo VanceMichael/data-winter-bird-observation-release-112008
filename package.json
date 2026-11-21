@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "node sources/source.mjs",
+    "app": "node app/main.mjs",
     "test": "node --test"
   }
 }
